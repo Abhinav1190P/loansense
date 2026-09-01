@@ -6,7 +6,7 @@ const client = new OpenAI({
   baseURL: process.env.LLM_BASE_URL || "https://api.groq.com/openai/v1",
 });
 
-const MODEL = process.env.LLM_MODEL || "llama-3.3-70b-versatile";
+const MODEL = process.env.LLM_MODEL || "openai/gpt-oss-20b";
 
 function buildPrompt(application: LoanApplication, decision: LoanDecision): string {
   const lines = [
@@ -34,6 +34,7 @@ function buildPrompt(application: LoanApplication, decision: LoanDecision): stri
 
 export async function explainDecision(application: LoanApplication, decision: LoanDecision): Promise<string> {
   if (!process.env.LLM_API_KEY) {
+    console.log("[explain] no LLM_API_KEY set, using fallback copy");
     return fallbackExplanation(decision);
   }
 
@@ -45,9 +46,10 @@ export async function explainDecision(application: LoanApplication, decision: Lo
       max_tokens: 400,
     });
 
+    console.log(`[explain] got a response from ${MODEL}`);
     return response.choices[0]?.message?.content?.trim() || fallbackExplanation(decision);
   } catch (err) {
-    console.error("explainDecision failed, falling back to canned copy", err);
+    console.error("[explain] call failed, falling back to canned copy:", err);
     return fallbackExplanation(decision);
   }
 }
