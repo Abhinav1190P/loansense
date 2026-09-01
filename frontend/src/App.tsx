@@ -10,6 +10,7 @@ export default function App() {
   const [result, setResult] = useState<EvaluateResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [formKey, setFormKey] = useState(0);
 
   async function handleSubmit(values: LoanFormValues) {
     setLoading(true);
@@ -17,6 +18,7 @@ export default function App() {
     try {
       const response = await evaluateLoan(values);
       setResult(response);
+      setFormKey((key) => key + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
       setResult(null);
@@ -33,7 +35,7 @@ export default function App() {
       </header>
 
       <main>
-        <LoanForm onSubmit={handleSubmit} loading={loading} />
+        <LoanForm key={formKey} onSubmit={handleSubmit} loading={loading} />
 
         {error && <div className="error-banner">{error}</div>}
 
