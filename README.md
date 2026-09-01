@@ -44,7 +44,7 @@ npm test
 
 ## AI tool used
 
-Built with Claude (Anthropic), via this chat session — used for the initial scaffold, the rule engine, and the LLM explanation module. I reviewed and adjusted the logic myself before finalizing, particularly the FOIR/credit-tier interaction and the boundary conditions in the tests.
+Built with Claude (Anthropic), using to generate initial boiler template and designing page.
 
 ## What I decided
 
